@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trader Expense & Income Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>📊 Trader Expense Tracker</h1>
+            <p>Track your business income and expenses with voice, photo, or manual input</p>
+        </div>
+        <!-- Dashboard Cards -->
+        <div class="dashboard">
+            <div class="card">
+                <h3>💰 Total Income</h3>
+                <div class="amount income" id="totalIncome">$0.00</div>
+                <p>Money coming in</p>
+            </div>
+            <div class="card">
+                <h3>💸 Total Expenses</h3>
+                <div class="amount expense" id="totalExpenses">$0.00</div>
+                <p>Money going out</p>
+            </div>
+            <div class="card">
+                <h3>📈 Net Profit</h3>
+                <div class="amount profit" id="netProfit">$0.00</div>
+                <p>Your bottom line</p>
+            </div>
+            <div class="card">
+                <h3>📋 Total Transactions</h3>
+                <div class="amount" id="totalTransactions">0</div>
+                <p>Entries recorded</p>
+            </div>
+        </div>
+        <!-- Input Section -->
+        <div class="input-section">
+            <h3>Add New Transaction</h3>
+
+            <!-- Input Method Selection -->
+            <div class="input-methods">
+                <div class="input-method" onclick="selectMethod('voice')">
+                    <div class="method-icon">🎤</div>
+                    <h4>Voice Input</h4>
+                    <p>Speak your transaction</p>
+                </div>
+                <div class="input-method" onclick="selectMethod('photo')">
+                    <div class="method-icon">📷</div>
+                    <h4>Photo Input</h4>
+                    <p>Upload receipt photo</p>
+                </div>
+                <div class="input-method active" onclick="selectMethod('manual')">
+                    <div class="method-icon">✍️</div>
+                    <h4>Manual Input</h4>
+                    <p>Type details manually</p>
+                </div>
+            </div>
+
+            <!-- Voice Input Controls -->
+            <div class="voice-controls" id="voiceControls">
+                <div class="voice-status" id="voiceStatus">Click "Start Recording" to begin</div>
+                <button class="btn" onclick="startVoiceRecording()">🎤 Start Recording</button>
+                <button class="btn btn-secondary" onclick="stopVoiceRecording()">⏹️ Stop Recording</button>
+                <p style="margin-top: 15px; color: #718096;">
+                    Say something like: "Income 500 dollars from selling products" or "Expense 50 dollars for office
+                    supplies"
+                </p>
+            </div>
+            <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
+            <!-- Photo Input -->
+            <div class="photo-upload" id="photoUpload">
+                <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload()"
+                    style="display: none;">
+                <button class="btn" onclick="document.getElementById('photoInput').click()">📷 Take/Upload
+                    Photo</button>
+                <div id="photoPreview"></div>
+                <div class="loading" id="photoLoading">
+                    <div class="spinner"></div>
+                    <p>Processing receipt...</p>
+
+                </div>
+            </div>
+
+            <!-- Manual Input Form -->
+            <div class="manual-form active" id="manualForm">
+                <div class="form-group">
+                    <label for="transactionType">Transaction Type</label>
+                    <select id="transactionType">
+                        <option value="income">💰 Income</option>
+                        <option value="expense">💸 Expense</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount ($)</label>
+                    <input type="number" id="amount" step="0.01" placeholder="0.00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" placeholder="What was this for?" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="sales">Sales</option>
+                        <option value="services">Services</option>
+                        <option value="supplies">Supplies</option>
+                        <option value="rent">Rent</option>
+                        <option value="utilities">Utilities</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="travel">Travel</option>
+                        <option value="food">Food</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
+            </div>
+        </div>
+
+        <!-- Transactions List -->
+        <div class="transactions">
+            <h3>Recent Transactions</h3>
+            <div id="transactionsList">
+                <p style="text-align: center; color: #718096; padding: 40px;">
+                    No transactions yet. Add your first transaction above!
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
