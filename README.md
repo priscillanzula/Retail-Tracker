@@ -39,13 +39,13 @@ Features
 ### Getting Started
 Installation
 
-Clone the repository:
+1. Clone the repository:
 
-git clone https://github.com/your-username/trader-expense-tracker.git
+   git clone https://github.com/your-username/trader-expense-tracker.git
 
-Navigate to the project directory:
+2. Navigate to the project directory:
 
- cd trader-expense-tracker
+   cd trader-expense-tracker
 
 ### Usage
 - Open index.html: Simply open the index.html file in your web browser.
