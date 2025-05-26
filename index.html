@@ -15,6 +15,7 @@
             <h1>📊 Trader Expense Tracker</h1>
             <p>Track your business income and expenses with voice, photo, or manual input</p>
         </div>
+
         <!-- Dashboard Cards -->
         <div class="dashboard">
             <div class="card">
@@ -38,23 +39,24 @@
                 <p>Entries recorded</p>
             </div>
         </div>
+
         <!-- Input Section -->
         <div class="input-section">
             <h3>Add New Transaction</h3>
 
             <!-- Input Method Selection -->
             <div class="input-methods">
-                <div class="input-method" onclick="selectMethod('voice')">
+                <div class="input-method" onclick="selectMethod('voice', event)">
                     <div class="method-icon">🎤</div>
                     <h4>Voice Input</h4>
                     <p>Speak your transaction</p>
                 </div>
-                <div class="input-method" onclick="selectMethod('photo')">
+                <div class="input-method" onclick="selectMethod('photo', event)">
                     <div class="method-icon">📷</div>
                     <h4>Photo Input</h4>
                     <p>Upload receipt photo</p>
                 </div>
-                <div class="input-method active" onclick="selectMethod('manual')">
+                <div class="input-method" onclick="selectMethod('manual', event)">
                     <div class="method-icon">✍️</div>
                     <h4>Manual Input</h4>
                     <p>Type details manually</p>
@@ -67,22 +69,22 @@
                 <button class="btn" onclick="startVoiceRecording()">🎤 Start Recording</button>
                 <button class="btn btn-secondary" onclick="stopVoiceRecording()">⏹️ Stop Recording</button>
                 <p style="margin-top: 15px; color: #718096;">
-                    Say something like: "Income 500 dollars from selling products" or "Expense 50 dollars for office
-                    supplies"
-                </p>
+                    Say something like: "Income 500 dollars for perfume products on 2024-04-20 in category supplies" or
+                    Expense 50 dollars for office
+                    supplies on 2024-05-25 in category supplies
+                    <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
             </div>
-            <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
+
             <!-- Photo Input -->
             <div class="photo-upload" id="photoUpload">
-                <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload()"
+                <input type="file" id="photoInput" accept="image/*" capture="environment" onchange="handlePhotoUpload()"
                     style="display: none;">
                 <button class="btn" onclick="document.getElementById('photoInput').click()">📷 Take/Upload
                     Photo</button>
                 <div id="photoPreview"></div>
-                <div class="loading" id="photoLoading">
+                <div class="loading" id="photoLoading" style="display: none;">
                     <div class="spinner"></div>
                     <p>Processing receipt...</p>
-
                 </div>
             </div>
 
@@ -95,7 +97,10 @@
                         <option value="expense">💸 Expense</option>
                     </select>
                 </div>
-
+                <div class="form-group">
+                    <label for="transactionDate">Date</label>
+                    <input type="date" id="transactionDate" required>
+                </div>
                 <div class="form-group">
                     <label for="amount">Amount ($)</label>
                     <input type="number" id="amount" step="0.01" placeholder="0.00" required>
@@ -125,6 +130,64 @@
             </div>
         </div>
 
+        <!-- Analytics Dashboard -->
+        <div class="analytics-dashboard">
+            <h3>📊 Analytics Dashboard</h3>
+
+            <!-- Time Period Selector -->
+            <div class="time-selector">
+                <button class="time-btn active" onclick="setAnalyticsPeriod('year')">Year View</button>
+                <button class="time-btn" onclick="setAnalyticsPeriod('month')">Month View</button>
+            </div>
+
+            <!-- Charts Container -->
+            <div class="charts-container">
+                <!-- Trends Chart -->
+                <div class="chart-card">
+                    <h4>Financial Trends</h4>
+                    <canvas id="trendsChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Category Performance -->
+                <div class="chart-card">
+                    <h4>Category Performance</h4>
+                    <canvas id="categoryChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Income vs Expenses -->
+                <div class="chart-card">
+                    <h4>Income vs Expenses Distribution</h4>
+                    <canvas id="pieChart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Monthly Comparison -->
+                <div class="chart-card">
+                    <h4>Monthly Financial Summary</h4>
+                    <canvas id="monthlyChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Analytics Summary -->
+            <div class="analytics-summary">
+                <div class="summary-card">
+                    <h4>📊 Top Income Category</h4>
+                    <div class="summary-value" id="topIncomeCategory">N/A</div>
+                </div>
+                <div class="summary-card">
+                    <h4>💸 Top Expense Category</h4>
+                    <div class="summary-value" id="topExpenseCategory">N/A</div>
+                </div>
+                <div class="summary-card">
+                    <h4>📈 Best Month</h4>
+                    <div class="summary-value" id="bestMonth">N/A</div>
+                </div>
+                <div class="summary-card">
+                    <h4>⚡ Avg Transaction</h4>
+                    <div class="summary-value" id="avgTransaction">$0.00</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Transactions List -->
         <div class="transactions">
             <h3>Recent Transactions</h3>
@@ -135,6 +198,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="script.js"></script>
 </body>
 
