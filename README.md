@@ -26,15 +26,15 @@ Features
 
 ### Technologies Used
 
-HTML5
+- HTML5
 
-CSS3
+- CSS3
 
-JavaScript (ES6+)
+- JavaScript (ES6+)
 
-Chart.js (for data visualization)
+- Chart.js (for data visualization)
 
-Web Speech API (for voice recognition)
+- Web Speech API (for voice recognition)
 
 ### Getting Started
 Installation
@@ -44,14 +44,15 @@ Clone the repository:
 git clone https://github.com/your-username/trader-expense-tracker.git
 
 Navigate to the project directory:
-cd trader-expense-tracker
+
+ cd trader-expense-tracker
 
 ### Usage
-Open index.html: Simply open the index.html file in your web browser.
+- Open index.html: Simply open the index.html file in your web browser.
 
-Add Transactions: Choose your preferred input method (Voice, Photo, or Manual) to add new income or expense entries.
+- Add Transactions: Choose your preferred input method (Voice, Photo, or Manual) to add new income or expense entries.
 
-Monitor Your Finances: The dashboard and analytics charts will update automatically to reflect your financial data.
+- Monitor Your Finances: The dashboard and analytics charts will update automatically to reflect your financial data.
 
 ### Project Structure
 
