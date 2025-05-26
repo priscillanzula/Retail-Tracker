@@ -44,7 +44,6 @@ Clone the repository:
 git clone https://github.com/your-username/trader-expense-tracker.git
 
 Navigate to the project directory:
-
 cd trader-expense-tracker
 
 ### Usage
@@ -64,6 +63,19 @@ Monitor Your Finances: The dashboard and analytics charts will update automatica
 
 ### Contributing
 Contributions are welcome!
+<table>
+   <tbody>
+      <tr>
+ <td align="center">
+        <a href="https://github.com/priscillanzula">
+          <img src="https://avatars.githubusercontent.com/u/144167777?v=4" width="100;" alt="priscillanzula"/>
+          <br />
+          <sub><b>Priscilla Nzula</b></sub>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ### License
 This project is open source and available under the MIT License.
