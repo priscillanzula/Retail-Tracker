@@ -650,7 +650,7 @@ footer {
         max-width: 340px;
     }
 }
-@media (max-width: 768px) {
+@media (max-width: 400px) {
     .dashboard {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -672,7 +672,7 @@ footer {
         align-items: center;
     }
 }
-@media (max-width: 600px) {
+@media (max-width: 400px) {
     .container {
         padding: 6px;
     }
