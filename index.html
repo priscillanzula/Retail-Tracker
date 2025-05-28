@@ -104,49 +104,9 @@
         </div>
 
         <div id="mainContent" class="hidden">
+            <div id="welcomeMessage" class="welcome-message"></div>
             <div class="input-section">
                 <h3>Add New Transaction</h3>
-                <div class="input-methods">
-                    <div class="input-method" onclick="selectMethod('voice', event)">
-                        <div class="method-icon">🎤</div>
-                        <h4>Voice Input</h4>
-                        <p>Speak your transaction</p>
-                    </div>
-                    <div class="input-method" onclick="selectMethod('photo', event)">
-                        <div class="method-icon">📷</div>
-                        <h4>Photo Input</h4>
-                        <p>Upload receipt photo</p>
-                    </div>
-                    <div class="input-method active" onclick="selectMethod('manual', event)">
-                        <div class="method-icon">✍️</div>
-                        <h4>Manual Input</h4>
-                        <p>Type details manually</p>
-                    </div>
-                </div>
-
-                <div class="voice-controls" id="voiceControls">
-                    <div class="voice-status" id="voiceStatus">Click "Start Recording" to begin</div>
-                    <button class="btn" onclick="startVoiceRecording()">🎤 Start Recording</button>
-                    <button class="btn btn-secondary" onclick="stopVoiceRecording()">⏹️ Stop Recording</button>
-                    <p style="margin-top: 15px; color: #718096;">
-                        Say something like: "Income 500 dollars for perfume products on 2024-04-20 in category
-                        supplies"
-                        or Expense 50 dollars for office supplies on 2024-05-25 in category supplies
-                    </p>
-                </div>
-
-                <div class="photo-upload" id="photoUpload">
-                    <input type="file" id="photoInput" accept="image/*" capture="environment"
-                        onchange="handlePhotoUpload()" style="display: none;">
-                    <button class="btn" onclick="document.getElementById('photoInput').click()">📷 Take/Upload
-                        Photo</button>
-                    <div id="photoPreview"></div>
-                    <div class="loading" id="photoLoading" style="display: none;">
-                        <div class="spinner"></div>
-                        <p>Processing receipt...</p>
-                    </div>
-                </div>
-
                 <div class="manual-form active" id="manualForm">
                     <div class="form-group">
                         <label for="transactionType">Transaction Type</label>
@@ -184,6 +144,48 @@
                     <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
                 </div>
             </div>
+            <div class="input-methods">
+                <div class="input-method" onclick="selectMethod('voice', event)">
+                    <div class="method-icon">🎤</div>
+                    <h4>Voice Input</h4>
+                    <p>Speak your transaction</p>
+                </div>
+                <div class="input-method" onclick="selectMethod('photo', event)">
+                    <div class="method-icon">📷</div>
+                    <h4>Photo Input</h4>
+                    <p>Upload receipt photo</p>
+                </div>
+                <div class="input-method active" onclick="selectMethod('manual', event)">
+                    <div class="method-icon">✍️</div>
+                    <h4>Manual Input</h4>
+                    <p>Type details manually</p>
+                </div>
+            </div>
+
+            <div class="voice-controls" id="voiceControls">
+                <div class="voice-status" id="voiceStatus">Click "Start Recording" to begin</div>
+                <button class="btn" onclick="startVoiceRecording()">🎤 Start Recording</button>
+                <button class="btn btn-secondary" onclick="stopVoiceRecording()">⏹️ Stop Recording</button>
+                <p style="margin-top: 15px; color: #718096;">
+                    Say something like: "Income 500 dollars for perfume products on 2024-04-20 in category
+                    supplies"
+                    or Expense 50 dollars for office supplies on 2024-05-25 in category supplies
+                </p>
+            </div>
+
+            <div class="photo-upload" id="photoUpload">
+                <input type="file" id="photoInput" accept="image/*" capture="environment" onchange="handlePhotoUpload()"
+                    style="display: none;">
+                <button class="btn" onclick="document.getElementById('photoInput').click()">📷 Take/Upload
+                    Photo</button>
+                <div id="photoPreview"></div>
+                <div class="loading" id="photoLoading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Processing receipt...</p>
+                </div>
+            </div>
+
+
             <div class="dashboard">
                 <div class="card">
                     <h3>💰 Total Income</h3>
@@ -206,9 +208,6 @@
                     <p>Entries recorded</p>
                 </div>
             </div>
-
-
-
             <div class="analytics-dashboard">
                 <h3>📊 Analytics Dashboard</h3>
                 <div class="time-selector">

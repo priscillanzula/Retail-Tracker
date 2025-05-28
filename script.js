@@ -85,10 +85,13 @@ function loginUser() {
         document.getElementById('homepage').classList.add('hidden');
         document.getElementById('mainContent').classList.remove('hidden');
         const authButtonsDiv = document.querySelector('.auth-buttons');
-        authButtonsDiv.innerHTML = `<span style="color: white; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
+        // authButtonsDiv.innerHTML = `<span style="color: white; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
         // Hide testimonials and how-it-works
         document.getElementById('testimonialsSection').classList.add('hidden');
         document.getElementById('howItWorksSection').classList.add('hidden');
+        // Set the centered welcome message
+        document.getElementById('welcomeMessage').innerHTML =
+        `Welcome ${currentUser.businessName} to BizWatch.<br>Track your cash flow!`;
         loadSampleData();
         updateDashboard();
         updateTransactionsList();
