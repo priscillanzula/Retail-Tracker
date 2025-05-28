@@ -110,6 +110,8 @@ function logoutUser() {
     const authButtonsDiv = document.querySelector('.auth-buttons');
     authButtonsDiv.innerHTML = `<button class="btn" onclick="openModal('loginModal')">Login</button>
                                 <button class="btn" onclick="openModal('registerModal')">Register</button>`;
+                                authButtonsDiv.innerHTML = `<button class="btn btn-small" onclick="openModal('loginModal')">Login</button>
+                                <button class="btn btn-small" onclick="openModal('registerModal')">Register</button>`;
     updateDashboard();
     updateTransactionsList();
     initializeAnalytics();
