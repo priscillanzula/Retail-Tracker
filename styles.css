@@ -659,7 +659,16 @@ footer {
         align-items: center;
     }
 }
-
+.voice-controls,
+.photo-upload,
+.manual-form {
+    display: none;
+}
+.voice-controls.active,
+.photo-upload.active,
+.manual-form.active {
+    display: block;
+}
 @media (max-width: 600px) {
     .container {
         padding: 2vw !important;
