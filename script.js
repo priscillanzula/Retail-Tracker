@@ -86,6 +86,9 @@ function loginUser() {
         document.getElementById('mainContent').classList.remove('hidden');
         const authButtonsDiv = document.querySelector('.auth-buttons');
         authButtonsDiv.innerHTML = `<span style="color: white; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
+        // Hide testimonials and how-it-works
+        document.getElementById('testimonialsSection').classList.add('hidden');
+        document.getElementById('howItWorksSection').classList.add('hidden');
         loadSampleData();
         updateDashboard();
         updateTransactionsList();

@@ -18,74 +18,84 @@
                 <button class="btn" onclick="openModal('registerModal')">Register</button>
             </div>
         </div>
-
-        <div class="homepage" id="homepage">
-            <div class="homepage-flex">
-                <div class="homepage-content">
-                    <h2>Track Your Finances with <span class="brand-highlight">BizWatch</span></h2>
-                    <p>Your ultimate tool for managing business income and expenses effortlessly.
-                        Whether you're a freelancer, a small business owner, or managing personal finances,
-                        <br> Our tracker helps you stay on top of your financial health with smart input methods.
-                    </p>
-                    <div class="features-list">
-                        <div class="feature-item"><span class="feature-icon">🎤</span> Quickly record transactions by
-                            speaking.</div>
-                        <div class="feature-item"><span class="feature-icon">📷</span>Snap photos of receipts and let us
-                            extract the details.</div>
-                        <div class="feature-item"><span class="feature-icon">✍️</span> Enter transactions precisely with
-                            a user-friendly form.</div>
-                        <div class="feature-item"><span class="feature-icon">📈</span> Visualize your financial trends,
-                            category performance, and monthly summaries.</div>
-                        <div class="feature-item"><span class="feature-icon">📋</span>Keep a detailed log of all your
-                            financial activities.</div>
+        <div class="container">
+            <div class="homepage" id="homepage">
+                <div class="homepage-flex">
+                    <div class="homepage-content">
+                        <h2>Track Your Finances with <span class="brand-highlight">BizWatch</span></h2>
+                        <p>Your ultimate tool for managing business income and expenses effortlessly.
+                            Whether you're a freelancer, a small business owner, or managing personal finances,
+                            <br> Our tracker helps you stay on top of your financial health with smart input methods.
+                        </p>
+                        <div class="features-list">
+                            <div class="feature-item"><span class="feature-icon">🎤</span> Quickly record transactions
+                                by
+                                speaking.</div>
+                            <div class="feature-item"><span class="feature-icon">📷</span>Snap photos of receipts and
+                                let us
+                                extract the details.</div>
+                            <div class="feature-item"><span class="feature-icon">✍️</span> Enter transactions precisely
+                                with
+                                a user-friendly form.</div>
+                            <div class="feature-item"><span class="feature-icon">📈</span> Visualize your financial
+                                trends,
+                                category performance, and monthly summaries.</div>
+                            <div class="feature-item"><span class="feature-icon">📋</span>Keep a detailed log of all
+                                your
+                                financial activities.</div>
+                        </div>
+                        <div style="text-align: left; margin-bottom: 24px;">
+                            <button class="btn get-started-btn" onclick="openModal('registerModal')">Get Started Free
+                                &rarr;</button>
+                        </div>
                     </div>
-                    <div style="text-align: left; margin-bottom: 24px;">
-                        <button class="btn get-started-btn" onclick="openModal('registerModal')">Get Started Free
-                            &rarr;</button>
+                    <div class="homepage-image-wrapper">
+                        <img src="https://images.unsplash.com/ph" alt="Analytics dashboard" class="homepage-image">
+                        <span class="image-accent top-right"></span>
+                        <span class="image-accent bottom-left"></span>
                     </div>
-                </div>
-                <div class="homepage-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80"
-                        alt="Analytics dashboard" class="homepage-image">
-                    <span class="image-accent top-right"></span>
-                    <span class="image-accent bottom-left"></span>
                 </div>
             </div>
-            <section class="testimonials">
-                <h2>What Our Users Say</h2>
-                <div class="testimonial-list">
-                    <div class="testimonial">
-                        <img class="testimonial-avatar" src="avatar1.jpg" alt="User 1">
-                        <div class="testimonial-quote">"Retail Tracker made my bookkeeping so easy!"</div>
-                        <div class="testimonial-user">— Jane K.</div>
+
+            <div class="container">
+                <section class="testimonials" id="testimonialsSection">
+                    <h2>What Our Users Say</h2>
+                    <div class="testimonial-list">
+                        <div class="testimonial">
+                            <img class="testimonial-avatar" src="avatar1.jpg" alt="User 1">
+                            <div class="testimonial-quote">"Retail Tracker made my bookkeeping so easy!"</div>
+                            <div class="testimonial-user">— Jane K.</div>
+                        </div>
+                        <div class="testimonial">
+                            <img class="testimonial-avatar" src="avatar2.jpg" alt="User 2">
+                            <div class="testimonial-quote">"I love the analytics dashboard. Highly recommended."</div>
+                            <div class="testimonial-user">— Samuel O.</div>
+                        </div>
                     </div>
-                    <div class="testimonial">
-                        <img class="testimonial-avatar" src="avatar2.jpg" alt="User 2">
-                        <div class="testimonial-quote">"I love the analytics dashboard. Highly recommended."</div>
-                        <div class="testimonial-user">— Samuel O.</div>
+                </section>
+            </div>
+            <div class="container">
+                <section class="how-it-works" id="howItWorksSection">
+                    <h2>How it Works</h2>
+                    <div class="how-steps">
+                        <div class="how-step">
+                            <div class="how-step-icon">📝</div>
+                            <div class="how-step-title">Add Transactions</div>
+                            <div class="how-step-desc">Quickly log your sales and expenses.</div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-icon">📊</div>
+                            <div class="how-step-title">View Analytics</div>
+                            <div class="how-step-desc">See your business performance at a glance.</div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-icon">🔔</div>
+                            <div class="how-step-title">Get Insights</div>
+                            <div class="how-step-desc">Receive tips and reminders to grow.</div>
+                        </div>
                     </div>
-                </div>
-            </section>
-            <section class="how-it-works">
-                <h2>How it Works</h2>
-                <div class="how-steps">
-                    <div class="how-step">
-                        <div class="how-step-icon">📝</div>
-                        <div class="how-step-title">Add Transactions</div>
-                        <div class="how-step-desc">Quickly log your sales and expenses.</div>
-                    </div>
-                    <div class="how-step">
-                        <div class="how-step-icon">📊</div>
-                        <div class="how-step-title">View Analytics</div>
-                        <div class="how-step-desc">See your business performance at a glance.</div>
-                    </div>
-                    <div class="how-step">
-                        <div class="how-step-icon">🔔</div>
-                        <div class="how-step-title">Get Insights</div>
-                        <div class="how-step-desc">Receive tips and reminders to grow.</div>
-                    </div>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
 
         <div id="mainContent" class="hidden">
@@ -137,7 +147,8 @@
                     <button class="btn" onclick="startVoiceRecording()">🎤 Start Recording</button>
                     <button class="btn btn-secondary" onclick="stopVoiceRecording()">⏹️ Stop Recording</button>
                     <p style="margin-top: 15px; color: #718096;">
-                        Say something like: "Income 500 dollars for perfume products on 2024-04-20 in category supplies"
+                        Say something like: "Income 500 dollars for perfume products on 2024-04-20 in category
+                        supplies"
                         or Expense 50 dollars for office supplies on 2024-05-25 in category supplies
                     </p>
                 </div>
@@ -261,7 +272,8 @@
                     <input type="password" id="loginPassword" required>
                 </div>
                 <button type="submit" class="btn">Login</button>
-                <p class="switch-form">Don't have an account? <a href="#" onclick="showRegister()">Register here</a></p>
+                <p class="switch-form">Don't have an account? <a href="#" onclick="showRegister()">Register here</a>
+                </p>
             </form>
         </div>
     </div>
