@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('homepage').classList.add('hidden');
         document.getElementById('mainContent').classList.remove('hidden');
         const authButtonsDiv = document.querySelector('.auth-buttons');
-        authButtonsDiv.innerHTML = `<span style="color: white; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
+        authButtonsDiv.innerHTML = `<span style="color: black; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
         loadSampleData();
         updateDashboard();
         initializeAnalytics();

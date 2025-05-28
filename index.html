@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="homepage-image-wrapper">
-                        <img src="https://images.unsplash.com/ph" alt="Analytics dashboard" class="homepage-image">
+                        <img src="images/tracker_i.png" alt="BizWatch Tracker" class="homepage-image">
                         <span class="image-accent top-right"></span>
                         <span class="image-accent bottom-left"></span>
                     </div>
@@ -62,14 +62,19 @@
                     <h2>What Our Users Say</h2>
                     <div class="testimonial-list">
                         <div class="testimonial">
-                            <img class="testimonial-avatar" src="avatar1.jpg" alt="User 1">
-                            <div class="testimonial-quote">"Retail Tracker made my bookkeeping so easy!"</div>
+
+                            <div class="testimonial-quote">"Biz Watch made my bookkeeping so easy!"</div>
                             <div class="testimonial-user">— Jane K.</div>
                         </div>
                         <div class="testimonial">
-                            <img class="testimonial-avatar" src="avatar2.jpg" alt="User 2">
+
                             <div class="testimonial-quote">"I love the analytics dashboard. Highly recommended."</div>
                             <div class="testimonial-user">— Samuel O.</div>
+                        </div>
+                        <div class="testimonial">
+                            <div class="testimonial-quote">"BizWatch helps me track my expenses on the go. Super
+                                convenient!"</div>
+                            <div class="testimonial-user">— Amina P.</div>
                         </div>
                     </div>
                 </section>
@@ -99,29 +104,6 @@
         </div>
 
         <div id="mainContent" class="hidden">
-            <div class="dashboard">
-                <div class="card">
-                    <h3>💰 Total Income</h3>
-                    <div class="amount income" id="totalIncome">$0.00</div>
-                    <p>Money coming in</p>
-                </div>
-                <div class="card">
-                    <h3>💸 Total Expenses</h3>
-                    <div class="amount expense" id="totalExpenses">$0.00</div>
-                    <p>Money going out</p>
-                </div>
-                <div class="card">
-                    <h3>📈 Net Profit</h3>
-                    <div class="amount profit" id="netProfit">$0.00</div>
-                    <p>Your bottom line</p>
-                </div>
-                <div class="card">
-                    <h3>📋 Total Transactions</h3>
-                    <div class="amount" id="totalTransactions">0</div>
-                    <p>Entries recorded</p>
-                </div>
-            </div>
-
             <div class="input-section">
                 <h3>Add New Transaction</h3>
                 <div class="input-methods">
@@ -202,6 +184,30 @@
                     <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
                 </div>
             </div>
+            <div class="dashboard">
+                <div class="card">
+                    <h3>💰 Total Income</h3>
+                    <div class="amount income" id="totalIncome">$0.00</div>
+                    <p>Money coming in</p>
+                </div>
+                <div class="card">
+                    <h3>💸 Total Expenses</h3>
+                    <div class="amount expense" id="totalExpenses">$0.00</div>
+                    <p>Money going out</p>
+                </div>
+                <div class="card">
+                    <h3>📈 Net Profit</h3>
+                    <div class="amount profit" id="netProfit">$0.00</div>
+                    <p>Your bottom line</p>
+                </div>
+                <div class="card">
+                    <h3>📋 Total Transactions</h3>
+                    <div class="amount" id="totalTransactions">0</div>
+                    <p>Entries recorded</p>
+                </div>
+            </div>
+
+
 
             <div class="analytics-dashboard">
                 <h3>📊 Analytics Dashboard</h3>

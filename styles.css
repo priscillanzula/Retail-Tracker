@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0549a3 0%, #c40d0d 100%);
+    background: linear-gradient(135deg, #f7f5f3 0%, #e7eee9 100%);
     min-height: 100vh;
     color: #333;
     display: flex;
@@ -43,7 +43,7 @@ body {
 .logo {
     font-size: 2rem;
     font-weight: bold;
-    color: #2b6cb0;
+    color: #a743e0;
     letter-spacing: 1px;
     margin-left: 0;
     position: absolute;
@@ -63,7 +63,7 @@ body {
 
 /* Homepage Styles */
 .homepage {
-    max-width: 1100px;         /* Increased from 600px */
+    /* max-width: 1100px;        */
     margin: 40px auto 0 auto;
     background: white;
     border-radius: 15px;
@@ -89,7 +89,7 @@ body {
     color: #555;
 }
 .brand-highlight {
-    color: #38b2ac;
+    color: #a743e0;
 }
 .homepage ul {
     list-style: none;
@@ -153,7 +153,7 @@ body {
 
 .homepage-image {
     max-width: 100%;
-    width: 380px;
+    width: 400px;
     height: auto;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(44,62,80,0.12);
@@ -233,13 +233,14 @@ body {
     background: linear-gradient(135deg, #f7fafc 60%, #e3e8ee 100%);
     border-radius: 14px;
     padding: 28px 24px;
+
     margin: 32px auto 24px auto;
-    max-width: 700px;
+    /* max-width: 700px; */
     box-shadow: 0 4px 18px rgba(102, 126, 234, 0.08);
 }
 
 .how-it-works h2 {
-    color: #2b6cb0;
+    color: #a743e0;
     font-size: 1.7em;
     margin-bottom: 18px;
     text-align: center;
@@ -299,12 +300,11 @@ body {
     border-radius: 14px;
     padding: 28px 24px;
     margin: 32px auto 24px auto;
-    max-width: 700px;
     box-shadow: 0 4px 18px rgba(102, 126, 234, 0.08);
 }
 
 .testimonials h2 {
-    color: #764ba2;
+    color:#a743e0;
     font-size: 1.7em;
     margin-bottom: 18px;
     text-align: center;
@@ -340,7 +340,7 @@ body {
 
 .testimonial-user {
     font-weight: 600;
-    color: #2b6cb0;
+    color: #a743e0;
     font-size: 0.97em;
 }
 
@@ -466,7 +466,7 @@ body {
 }
 
 .btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5f72c7 0%, #a743e0);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -598,11 +598,7 @@ body {
         padding: 10px;
     }
 
-    /* .auth-buttons {
-        position: static; /* Reset position for smaller screens */
-        /* justify-content: center;
-        margin-top: 15px;
-    /* } */  
+
 }
 
 .loading {
@@ -782,6 +778,7 @@ body {
     position: absolute;
     top: 15px;
     right: 25px;
+
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -824,7 +821,7 @@ footer {
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.9em;
     margin-top: auto; /* Pushes footer to the bottom */
-    background: rgba(0,0,0,0.2);
+    background:#a743e0;
 }
 /* ...existing code... */
 
@@ -869,6 +866,7 @@ footer {
         padding: 10px 8px;
     }
 }
+
 
 @media (max-width: 600px) {
     #mainContent {
