@@ -704,9 +704,11 @@ footer {
         width: 100%;
         border-radius: 10px;
     }
-    .homepage-flex {
+    .homepage-flex,
+    .testimonial-list,
+    .how-steps {
         flex-direction: column;
-        gap: 16px;
+        gap: 8px;
     }
     .homepage-content {
         min-width: 0;
