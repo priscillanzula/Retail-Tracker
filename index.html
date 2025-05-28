@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trader Expense & Income Tracker</title>
+    <title>BizWatch</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">Retail Tracker</div>
+            <div class="logo">BizWatch</div>
             <div class="auth-buttons">
                 <button class="btn" onclick="openModal('loginModal')">Login</button>
                 <button class="btn" onclick="openModal('registerModal')">Register</button>
@@ -21,27 +22,22 @@
         <div class="homepage" id="homepage">
             <div class="homepage-flex">
                 <div class="homepage-content">
-                    <h2>Track Your Business Finances with <span class="brand-highlight">Retail Tracker</span></h2>
+                    <h2>Track Your Finances with <span class="brand-highlight">BizWatch</span></h2>
                     <p>Your ultimate tool for managing business income and expenses effortlessly.
                         Whether you're a freelancer, a small business owner, or managing personal finances,
                         <br> Our tracker helps you stay on top of your financial health with smart input methods.
                     </p>
                     <div class="features-list">
                         <div class="feature-item"><span class="feature-icon">🎤</span> Quickly record transactions by
-                            speaking.
-                        </div>
+                            speaking.</div>
                         <div class="feature-item"><span class="feature-icon">📷</span>Snap photos of receipts and let us
-                            extract
-                            the details.</div>
+                            extract the details.</div>
                         <div class="feature-item"><span class="feature-icon">✍️</span> Enter transactions precisely with
-                            a
-                            user-friendly form.</div>
+                            a user-friendly form.</div>
                         <div class="feature-item"><span class="feature-icon">📈</span> Visualize your financial trends,
-                            category
-                            performance, and monthly summaries.</div>
+                            category performance, and monthly summaries.</div>
                         <div class="feature-item"><span class="feature-icon">📋</span>Keep a detailed log of all your
-                            financial
-                            activities.</div>
+                            financial activities.</div>
                     </div>
                     <div style="text-align: left; margin-bottom: 24px;">
                         <button class="btn get-started-btn" onclick="openModal('registerModal')">Get Started Free
@@ -92,8 +88,6 @@
             </section>
         </div>
 
-
-
         <div id="mainContent" class="hidden">
             <div class="dashboard">
                 <div class="card">
@@ -120,7 +114,6 @@
 
             <div class="input-section">
                 <h3>Add New Transaction</h3>
-
                 <div class="input-methods">
                     <div class="input-method" onclick="selectMethod('voice', event)">
                         <div class="method-icon">🎤</div>
@@ -145,8 +138,7 @@
                     <button class="btn btn-secondary" onclick="stopVoiceRecording()">⏹️ Stop Recording</button>
                     <p style="margin-top: 15px; color: #718096;">
                         Say something like: "Income 500 dollars for perfume products on 2024-04-20 in category supplies"
-                        or
-                        Expense 50 dollars for office supplies on 2024-05-25 in category supplies
+                        or Expense 50 dollars for office supplies on 2024-05-25 in category supplies
                     </p>
                 </div>
 
@@ -178,12 +170,10 @@
                         <label for="amount">Amount ($)</label>
                         <input type="number" id="amount" step="0.01" placeholder="0.00" required>
                     </div>
-
                     <div class="form-group">
                         <label for="description">Description</label>
                         <input type="text" id="description" placeholder="What was this for?" required>
                     </div>
-
                     <div class="form-group">
                         <label for="category">Category</label>
                         <select id="category">
@@ -198,41 +188,34 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-
                     <button class="btn" onclick="addTransaction()">➕ Add Transaction</button>
                 </div>
             </div>
 
             <div class="analytics-dashboard">
                 <h3>📊 Analytics Dashboard</h3>
-
                 <div class="time-selector">
                     <button class="time-btn active" onclick="setAnalyticsPeriod('year', event)">Year View</button>
                     <button class="time-btn" onclick="setAnalyticsPeriod('month', event)">Month View</button>
                 </div>
-
                 <div class="charts-container">
                     <div class="chart-card">
                         <h4>Financial Trends</h4>
                         <canvas id="trendsChart" width="400" height="200"></canvas>
                     </div>
-
                     <div class="chart-card">
                         <h4>Category Performance</h4>
                         <canvas id="categoryChart" width="400" height="200"></canvas>
                     </div>
-
                     <div class="chart-card">
                         <h4>Income vs Expenses Distribution</h4>
                         <canvas id="pieChart" width="400" height="200"></canvas>
                     </div>
-
                     <div class="chart-card">
                         <h4>Monthly Financial Summary</h4>
                         <canvas id="monthlyChart" width="400" height="200"></canvas>
                     </div>
                 </div>
-
                 <div class="analytics-summary">
                     <div class="summary-card">
                         <h4>📊 Top Income Category</h4>

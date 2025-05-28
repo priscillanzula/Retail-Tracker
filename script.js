@@ -1,68 +1,49 @@
-backgroundColor: (context) => {
-    // Safely check for parsed and y
-    if (context.parsed && typeof context.parsed.y !== 'undefined') {
-        return context.parsed.y >= 0 ? '#38a169' : '#e53e3e';
-    }
-    // fallback color
-    return '#805ad5';
-}
-
 // Global variables to store our data
-let transactions = []; // [cite: 1]
-let users = []; // Stores registered user data [cite: 1]
-let currentUser = null; // Tracks the currently logged-in user [cite: 1]
-let currentMethod = 'manual'; // [cite: 1]
-let recognition = null; // [cite: 1]
-let isRecording = false; // [cite: 1]
-let analyticsPeriod = 'year'; // [cite: 1]
-let charts = {}; // [cite: 1]
+let transactions = [];
+let users = [];
+let currentUser = null;
+let currentMethod = 'manual';
+let recognition = null;
+let isRecording = false;
+let analyticsPeriod = 'year'; // 'year' or 'month'
+let charts = {};
 
 // Initialize the app when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if there's a logged-in user in session storage
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
         currentUser = JSON.parse(storedUser);
         document.getElementById('homepage').classList.add('hidden');
         document.getElementById('mainContent').classList.remove('hidden');
-        // Add a logout button to the header
         const authButtonsDiv = document.querySelector('.auth-buttons');
         authButtonsDiv.innerHTML = `<span style="color: white; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
-        // Load transactions for the logged-in user (if implemented per user)
-        // For now, load sample data if user exists
         loadSampleData();
-        updateDashboard(); // [cite: 1]
-        initializeAnalytics(); // [cite: 1]
-        updateTransactionsList(); // [cite: 1]
+        updateDashboard();
+        initializeAnalytics();
+        updateTransactionsList();
     } else {
         document.getElementById('homepage').classList.remove('hidden');
         document.getElementById('mainContent').classList.add('hidden');
     }
 
-    setupSpeechRecognition(); // [cite: 1]
-    // Initialize analytics only if content is visible (i.e., user is logged in)
-    if (document.getElementById('mainContent').classList.contains('hidden')) {
-        // Do nothing, analytics initialized after login
-    } else {
+    setupSpeechRecognition();
+    if (!document.getElementById('mainContent').classList.contains('hidden')) {
         initializeAnalytics();
     }
-    selectMethod('manual'); // Default to manual input [cite: 1]
+    selectMethod('manual');
 });
 
 // User Authentication Functions
 function openModal(modalId) {
     document.getElementById(modalId).classList.add('active');
 }
-
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('active');
 }
-
 function showLogin() {
     closeModal('registerModal');
     openModal('loginModal');
 }
-
 function showRegister() {
     closeModal('loginModal');
     openModal('registerModal');
@@ -82,66 +63,50 @@ function registerUser() {
         alert('Password must be at least 6 characters long.');
         return;
     }
-
     if (users.some(user => user.email === email)) {
         alert('This email is already registered.');
         return;
     }
-
     const newUser = { businessName, email, password };
     users.push(newUser);
     alert('Registration successful! You can now log in.');
     closeModal('registerModal');
-    showLogin(); // Automatically switch to login form
+    showLogin();
 }
-
 function loginUser() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-
     const foundUser = users.find(user => user.email === email && user.password === password);
-
     if (foundUser) {
         currentUser = foundUser;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser)); // Store current user
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
         alert('Login successful! Welcome back, ' + currentUser.businessName + '!');
         closeModal('loginModal');
         document.getElementById('homepage').classList.add('hidden');
         document.getElementById('mainContent').classList.remove('hidden');
-
-        // Update auth buttons
         const authButtonsDiv = document.querySelector('.auth-buttons');
         authButtonsDiv.innerHTML = `<span style="color: white; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span><button class="btn btn-secondary" onclick="logoutUser()">Logout</button>`;
-
-
-        // Load sample data for demo. In a real app, you'd load user-specific data from a backend.
         loadSampleData();
-        updateDashboard(); // [cite: 1]
-        updateTransactionsList(); // [cite: 1]
-        initializeAnalytics(); // [cite: 1]
+        updateDashboard();
+        updateTransactionsList();
+        initializeAnalytics();
     } else {
         alert('Invalid email or password. Please try again or register.');
     }
 }
-
 function logoutUser() {
     currentUser = null;
-    localStorage.removeItem('currentUser'); // Clear stored user
-    transactions = []; // Clear transactions on logout
+    localStorage.removeItem('currentUser');
+    transactions = [];
     alert('You have been logged out.');
     document.getElementById('mainContent').classList.add('hidden');
     document.getElementById('homepage').classList.remove('hidden');
-
-    // Reset auth buttons
     const authButtonsDiv = document.querySelector('.auth-buttons');
     authButtonsDiv.innerHTML = `<button class="btn" onclick="openModal('loginModal')">Login</button>
                                 <button class="btn" onclick="openModal('registerModal')">Register</button>`;
-
-    // Clear dashboard and charts
     updateDashboard();
     updateTransactionsList();
-    // Re-initialize analytics to clear charts
-    initializeAnalytics(); // This will clear charts as there's no data
+    initializeAnalytics();
 }
 
 // Sample Data Load (for demo purposes)
@@ -162,307 +127,229 @@ function loadSampleData() {
     ];
 }
 
-
 // Method selection function
-function selectMethod(method, event) { // [cite: 1]
-    // Remove active class from all methods
-    document.querySelectorAll('.input-method').forEach(el => el.classList.remove('active')); // [cite: 1]
-    document.querySelectorAll('.voice-controls, .photo-upload, .manual-form').forEach(el => el.classList.remove('active')); // [cite: 1]
-
-    // Add active class to selected method
-    if (event && event.target) { // [cite: 1]
-        // If called from a click event
-        const methodDiv = event.target.closest('.input-method'); // [cite: 1]
-        if (methodDiv) methodDiv.classList.add('active'); // [cite: 1]
+function selectMethod(method, event) {
+    document.querySelectorAll('.input-method').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.voice-controls, .photo-upload, .manual-form').forEach(el => el.classList.remove('active'));
+    if (event && event.target) {
+        const methodDiv = event.target.closest('.input-method');
+        if (methodDiv) methodDiv.classList.add('active');
     } else {
-        // If called programmatically, find by method
-        const methodDiv = document.querySelector(`.input-method[onclick*="${method}"]`); // [cite: 1]
-        if (methodDiv) methodDiv.classList.add('active'); // [cite: 1]
+        const methodDiv = document.querySelector(`.input-method[onclick*="${method}"]`);
+        if (methodDiv) methodDiv.classList.add('active');
     }
-    currentMethod = method; // [cite: 1]
-
-    // Show appropriate input section
-    if (method === 'voice') { // [cite: 1]
-        document.getElementById('voiceControls').classList.add('active'); // [cite: 1]
-    } else if (method === 'photo') { // [cite: 1]
-        document.getElementById('photoUpload').classList.add('active'); // [cite: 1]
+    currentMethod = method;
+    if (method === 'voice') {
+        document.getElementById('voiceControls').classList.add('active');
+    } else if (method === 'photo') {
+        document.getElementById('photoUpload').classList.add('active');
     } else {
-        document.getElementById('manualForm').classList.add('active'); // [cite: 1]
+        document.getElementById('manualForm').classList.add('active');
     }
 }
 
 // Speech Recognition Setup
-function setupSpeechRecognition() { // [cite: 1]
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) { // [cite: 1]
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; // [cite: 1]
-        recognition = new SpeechRecognition(); // [cite: 1]
-
-        recognition.continuous = false; // [cite: 1]
-        recognition.interimResults = false; // [cite: 1]
-        recognition.lang = 'en-US'; // [cite: 1]
-
-        recognition.onstart = function() { // [cite: 1]
-            isRecording = true; // [cite: 1]
-            document.getElementById('voiceStatus').textContent = '🎤 Listening... Speak now!'; // [cite: 1]
-            document.getElementById('voiceStatus').style.background = '#fed7d7'; // [cite: 1]
+function setupSpeechRecognition() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        recognition.onstart = function() {
+            isRecording = true;
+            document.getElementById('voiceStatus').textContent = '🎤 Listening... Speak now!';
+            document.getElementById('voiceStatus').style.background = '#fed7d7';
         };
-
-        recognition.onresult = function(event) { // [cite: 1]
-            const transcript = event.results[0][0].transcript; // [cite: 1]
-            document.getElementById('voiceStatus').textContent = `Heard: "${transcript}"`; // [cite: 1]
-            document.getElementById('voiceStatus').style.background = '#c6f6d5'; // [cite: 1]
-            processVoiceInput(transcript); // [cite: 1]
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('voiceStatus').textContent = `Heard: "${transcript}"`;
+            document.getElementById('voiceStatus').style.background = '#c6f6d5';
+            processVoiceInput(transcript);
         };
-
-        recognition.onerror = function(event) { // [cite: 1]
-            document.getElementById('voiceStatus').textContent = `Error: ${event.error}`; // [cite: 1]
-            document.getElementById('voiceStatus').style.background = '#fed7d7'; // [cite: 1]
-            isRecording = false; // [cite: 1]
+        recognition.onerror = function(event) {
+            document.getElementById('voiceStatus').textContent = `Error: ${event.error}`;
+            document.getElementById('voiceStatus').style.background = '#fed7d7';
+            isRecording = false;
         };
-
-        recognition.onend = function() { // [cite: 1]
-            isRecording = false; // [cite: 1]
+        recognition.onend = function() {
+            isRecording = false;
         };
     } else {
-        document.getElementById('voiceControls').innerHTML = '<p style="color: #f56565;">Speech recognition not supported in this browser. Please use Chrome or Edge.</p>'; // [cite: 1]
+        document.getElementById('voiceControls').innerHTML = '<p style="color: #f56565;">Speech recognition not supported in this browser. Please use Chrome or Edge.</p>';
     }
 }
-
-// Voice recording functions
-function startVoiceRecording() { // [cite: 1]
-    if (recognition && !isRecording) { // [cite: 1]
-        recognition.start(); // [cite: 1]
+function startVoiceRecording() {
+    if (recognition && !isRecording) {
+        recognition.start();
     }
 }
-
-function stopVoiceRecording() { // [cite: 1]
-    if (recognition && isRecording) { // [cite: 1]
-        recognition.stop(); // [cite: 1]
+function stopVoiceRecording() {
+    if (recognition && isRecording) {
+        recognition.stop();
     }
 }
-
-function processVoiceInput(transcript) { // [cite: 1]
-    // Lowercase for easier matching
-    const text = transcript.toLowerCase(); // [cite: 1]
-
-    // Extract type
-    let type = ''; // [cite: 1]
-    if (text.includes('income')) type = 'income'; // [cite: 1]
-    else if (text.includes('expense')) type = 'expense'; // [cite: 1]
-
-    // Extract amount
-    let amountMatch = text.match(/(\d+(\.\d+)?)/); // [cite: 1]
-    let amount = amountMatch ? parseFloat(amountMatch[1]) : ''; // [cite: 1]
-
-    // Extract date (format: YYYY-MM-DD or MM/DD/YYYY or "today"/"yesterday")
-    let date = ''; // [cite: 1]
-    let dateMatch = text.match(/(\d{4}-\d{2}-\d{2})/); // YYYY-MM-DD [cite: 1]
-    if (dateMatch) { // [cite: 1]
-        date = dateMatch[1]; // [cite: 1]
-    } else if (text.includes('today')) { // [cite: 1]
-        date = new Date().toISOString().split('T')[0]; // [cite: 1]
-    } else if (text.includes('yesterday')) { // [cite: 1]
-        let d = new Date(); // [cite: 1]
-        d.setDate(d.getDate() - 1); // [cite: 1]
-        date = d.toISOString().split('T')[0]; // [cite: 1]
+function processVoiceInput(transcript) {
+    const text = transcript.toLowerCase();
+    let type = '';
+    if (text.includes('income')) type = 'income';
+    else if (text.includes('expense')) type = 'expense';
+    let amountMatch = text.match(/(\d+(\.\d+)?)/);
+    let amount = amountMatch ? parseFloat(amountMatch[1]) : '';
+    let date = '';
+    let dateMatch = text.match(/(\d{4}-\d{2}-\d{2})/);
+    if (dateMatch) {
+        date = dateMatch[1];
+    } else if (text.includes('today')) {
+        date = new Date().toISOString().split('T')[0];
+    } else if (text.includes('yesterday')) {
+        let d = new Date();
+        d.setDate(d.getDate() - 1);
+        date = d.toISOString().split('T')[0];
     }
-
-    // Extract category (looks for "category X" or "in X" or "for X")
-    let category = ''; // [cite: 1]
-    let catMatch = text.match(/category (\w+)/); // [cite: 1]
-    if (catMatch) { // [cite: 1]
-        category = catMatch[1]; // [cite: 1]
+    let category = '';
+    let catMatch = text.match(/category (\w+)/);
+    if (catMatch) {
+        category = catMatch[1];
     } else {
-        let inMatch = text.match(/in (\w+)/); // [cite: 1]
-        if (inMatch) category = inMatch[1]; // [cite: 1]
-        let forMatch = text.match(/for ([a-z ]+)/); // [cite: 1]
-        if (forMatch) category = forMatch[1].trim().split(' ')[0]; // [cite: 1]
+        let inMatch = text.match(/in (\w+)/);
+        if (inMatch) category = inMatch[1];
+        let forMatch = text.match(/for ([a-z ]+)/);
+        if (forMatch) category = forMatch[1].trim().split(' ')[0];
     }
-
-    // Extract description (after "for" or "on")
-    let description = ''; // [cite: 1]
-    let descMatch = text.match(/for (.+?)( on | in |$)/); // [cite: 1]
-    if (descMatch) { // [cite: 1]
-        description = descMatch[1].trim(); // [cite: 1]
+    let description = '';
+    let descMatch = text.match(/for (.+?)( on | in |$)/);
+    if (descMatch) {
+        description = descMatch[1].trim();
     } else {
-        // fallback: use the whole transcript
-        description = transcript; // [cite: 1]
+        description = transcript;
     }
-
-    // Fill the manual form fields
-    if (type) document.getElementById('transactionType').value = type; // [cite: 1]
-    if (amount) document.getElementById('amount').value = amount; // [cite: 1]
-    if (description) document.getElementById('description').value = description; // [cite: 1]
-    if (category) document.getElementById('category').value = category; // [cite: 1]
-    if (date) document.getElementById('transactionDate').value = date; // [cite: 1]
-
-    // Show manual form for review
-    selectMethod('manual'); // [cite: 1]
-
-
+    if (type) document.getElementById('transactionType').value = type;
+    if (amount) document.getElementById('amount').value = amount;
+    if (description) document.getElementById('description').value = description;
+    if (category) document.getElementById('category').value = category;
+    if (date) document.getElementById('transactionDate').value = date;
+    selectMethod('manual');
 }
 
 // Photo upload handler
-function handlePhotoUpload() { // [cite: 1]
-    const input = document.getElementById('photoInput'); // [cite: 1]
-    const preview = document.getElementById('photoPreview'); // [cite: 1]
-    const loading = document.getElementById('photoLoading'); // [cite: 1]
-
-    preview.innerHTML = ''; // [cite: 1]
-
-    if (input.files && input.files[0]) { // [cite: 1]
-        const file = input.files[0]; // [cite: 1]
-        const reader = new FileReader(); // [cite: 1]
-
-        loading.style.display = 'block'; // [cite: 1]
-
-        reader.onload = function(e) { // [cite: 1]
-            const img = document.createElement('img'); // [cite: 1]
-            img.src = e.target.result; // [cite: 1]
-            img.style.maxWidth = '200px'; // [cite: 1]
-            img.style.maxHeight = '200px'; // [cite: 1]
-            img.style.borderRadius = '8px'; // [cite: 1]
-            img.style.marginTop = '15px'; // [cite: 1]
-            preview.appendChild(img); // [cite: 1]
-
-            // Simulate OCR processing
+function handlePhotoUpload() {
+    const input = document.getElementById('photoInput');
+    const preview = document.getElementById('photoPreview');
+    const loading = document.getElementById('photoLoading');
+    preview.innerHTML = '';
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        loading.style.display = 'block';
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '200px';
+            img.style.maxHeight = '200px';
+            img.style.borderRadius = '8px';
+            img.style.marginTop = '15px';
+            preview.appendChild(img);
             setTimeout(() => {
-                loading.style.display = 'none'; // [cite: 1]
-
-                // Simulate realistic extracted data with date
-                const receiptItems = [ // [cite: 1]
-                    { amount: 25.99, description: 'Office supplies from receipt', type: 'expense', category: 'supplies', date: '2024-05-26' }, // [cite: 1]
-                    { amount: 45.50, description: 'Business lunch receipt', type: 'expense', category: 'food', date: '2024-05-25' }, // [cite: 1]
-                    { amount: 12.75, description: 'Parking receipt', type: 'expense', category: 'travel', date: '2024-05-24' }, // [cite: 1]
-                    { amount: 89.99, description: 'Equipment purchase', type: 'expense', category: 'supplies', date: '2024-05-23' }, // [cite: 1]
-                    { amount: 150.00, description: 'Client payment received', type: 'income', category: 'services', date: '2024-05-22' } // [cite: 1]
+                loading.style.display = 'none';
+                const receiptItems = [
+                    { amount: 25.99, description: 'Office supplies from receipt', type: 'expense', category: 'supplies', date: '2024-05-26' },
+                    { amount: 45.50, description: 'Business lunch receipt', type: 'expense', category: 'food', date: '2024-05-25' },
+                    { amount: 12.75, description: 'Parking receipt', type: 'expense', category: 'travel', date: '2024-05-24' },
+                    { amount: 89.99, description: 'Equipment purchase', type: 'expense', category: 'supplies', date: '2024-05-23' },
+                    { amount: 150.00, description: 'Client payment received', type: 'income', category: 'services', date: '2024-05-22' }
                 ];
-
-                const mockData = receiptItems[Math.floor(Math.random() * receiptItems.length)]; // [cite: 1]
-
-                // Populate manual form
-                document.getElementById('transactionType').value = mockData.type; // [cite: 1]
-                document.getElementById('amount').value = mockData.amount; // [cite: 1]
-                document.getElementById('description').value = mockData.description; // [cite: 1]
-                document.getElementById('category').value = mockData.category; // [cite: 1]
-                document.getElementById('transactionDate').value = mockData.date; // <-- Set the date [cite: 1]
-
-                // Switch to manual form for review
-                selectMethod('manual'); // [cite: 1]
-
-                alert('Receipt processed! Please review the extracted details and click "Add Transaction".'); // [cite: 1]
-            }, 2000); // [cite: 1]
+                const mockData = receiptItems[Math.floor(Math.random() * receiptItems.length)];
+                document.getElementById('transactionType').value = mockData.type;
+                document.getElementById('amount').value = mockData.amount;
+                document.getElementById('description').value = mockData.description;
+                document.getElementById('category').value = mockData.category;
+                document.getElementById('transactionDate').value = mockData.date;
+                selectMethod('manual');
+                alert('Receipt processed! Please review the extracted details and click "Add Transaction".');
+            }, 2000);
         };
-
-        reader.readAsDataURL(file); // [cite: 1]
+        reader.readAsDataURL(file);
     }
 }
 
 // Add transaction function
-function addTransaction() { // [cite: 1]
+function addTransaction() {
     if (!currentUser) {
         alert('Please login to add transactions.');
         return;
     }
-
-    const type = document.getElementById('transactionType').value; // [cite: 1]
-    const amount = parseFloat(document.getElementById('amount').value); // [cite: 1]
-    const description = document.getElementById('description').value; // [cite: 1]
-    const category = document.getElementById('category').value; // [cite: 1]
-    const dateInput = document.getElementById('transactionDate').value; // [cite: 1]
-
-    if (!amount || amount <= 0) { // [cite: 1]
-        alert('Please enter a valid amount'); // [cite: 1]
-        return; // [cite: 1]
+    const type = document.getElementById('transactionType').value;
+    const amount = parseFloat(document.getElementById('amount').value);
+    const description = document.getElementById('description').value;
+    const category = document.getElementById('category').value;
+    const dateInput = document.getElementById('transactionDate').value;
+    if (!amount || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
     }
-
-    if (!description.trim()) { // [cite: 1]
-        alert('Please enter a description'); // [cite: 1]
-        return; // [cite: 1]
+    if (!description.trim()) {
+        alert('Please enter a description');
+        return;
     }
-    // Use selected date or today's date if not set
-    const dateObj = dateInput ? new Date(dateInput) : new Date(); // [cite: 1]
-    const date = dateObj.toLocaleDateString(); // [cite: 1]
-    const time = dateObj.toLocaleTimeString(); // [cite: 1]
-    const year = dateObj.getFullYear(); // [cite: 1]
-    const month = dateObj.getMonth() + 1; // 1-based [cite: 1]
-
-    // Create transaction object
-    const transaction = { // [cite: 1]
-        id: Date.now(), // [cite: 1]
-        type: type, // [cite: 1]
-        amount: amount, // [cite: 1]
-        description: description.trim(), // [cite: 1]
-        category: category, // [cite: 1]
-        date: date, // [cite: 1]
-        time: time, // [cite: 1]
-        year: year, // [cite: 1]
-        month: month, // [cite: 1]
-        timestamp: dateObj // [cite: 1]
+    const dateObj = dateInput ? new Date(dateInput) : new Date();
+    const date = dateObj.toLocaleDateString();
+    const time = dateObj.toLocaleTimeString();
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+    const transaction = {
+        id: Date.now(),
+        type: type,
+        amount: amount,
+        description: description.trim(),
+        category: category,
+        date: date,
+        time: time,
+        year: year,
+        month: month,
+        timestamp: dateObj
     };
-    // Add to transactions array
-    transactions.unshift(transaction); // [cite: 1]
-
-    // Update all displays
-    updateDashboard(); // [cite: 1]
-    updateTransactionsList(); // [cite: 1]
-    updateAnalytics(); // [cite: 1]
-
-    // Clear form
-    document.getElementById('amount').value = ''; // [cite: 1]
-    document.getElementById('description').value = ''; // [cite: 1]
-    document.getElementById('transactionDate').value = ''; // Clear date input
-    document.getElementById('category').value = 'other'; // Reset category
-    document.getElementById('transactionType').value = 'income'; // Reset type
-
-    // Reset button text if it was changed
-    const addBtn = document.querySelector('#manualForm .btn'); // [cite: 1]
-    addBtn.textContent = '➕ Add Transaction'; // [cite: 1]
-    addBtn.style.animation = ''; // [cite: 1]
-
-    // Show success message
-    alert(`✅ ${type === 'income' ? 'Income' : 'Expense'} of $${amount.toFixed(2)} added successfully!`); // [cite: 1]
+    transactions.unshift(transaction);
+    updateDashboard();
+    updateTransactionsList();
+    updateAnalytics();
+    document.getElementById('amount').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('transactionDate').value = '';
+    document.getElementById('category').value = 'other';
+    document.getElementById('transactionType').value = 'income';
+    const addBtn = document.querySelector('#manualForm .btn');
+    addBtn.textContent = '➕ Add Transaction';
+    addBtn.style.animation = '';
+    alert(`✅ ${type === 'income' ? 'Income' : 'Expense'} of $${amount.toFixed(2)} added successfully!`);
 }
 
 // Update dashboard calculations
-function updateDashboard() { // [cite: 1]
-    if (!currentUser) return; // Only update if logged in
-
-    const income = transactions // [cite: 1]
-        .filter(t => t.type === 'income') // [cite: 1]
-        .reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-
-    const expenses = transactions // [cite: 1]
-        .filter(t => t.type === 'expense') // [cite: 1]
-        .reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-
-    const profit = income - expenses; // [cite: 1]
-
-    document.getElementById('totalIncome').textContent = `$${income.toFixed(2)}`; // [cite: 1]
-    document.getElementById('totalExpenses').textContent = `$${expenses.toFixed(2)}`; // [cite: 1]
-    document.getElementById('netProfit').textContent = `$${profit.toFixed(2)}`; // [cite: 1]
-    document.getElementById('totalTransactions').textContent = transactions.length; // [cite: 1]
-
-    // Change profit color based on positive/negative
-    const profitElement = document.getElementById('netProfit'); // [cite: 1]
-    if (profit >= 0) { // [cite: 1]
-        profitElement.className = 'amount profit'; // [cite: 1]
+function updateDashboard() {
+    if (!currentUser) return;
+    const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    const profit = income - expenses;
+    document.getElementById('totalIncome').textContent = `$${income.toFixed(2)}`;
+    document.getElementById('totalExpenses').textContent = `$${expenses.toFixed(2)}`;
+    document.getElementById('netProfit').textContent = `$${profit.toFixed(2)}`;
+    document.getElementById('totalTransactions').textContent = transactions.length;
+    const profitElement = document.getElementById('netProfit');
+    if (profit >= 0) {
+        profitElement.className = 'amount profit';
     } else {
-        profitElement.className = 'amount expense'; // [cite: 1]
+        profitElement.className = 'amount expense';
     }
 }
 
 // Update transactions list display
-function updateTransactionsList() { // [cite: 1]
-    if (!currentUser) return; // Only update if logged in
-
-    const container = document.getElementById('transactionsList'); // [cite: 1]
-
-    if (transactions.length === 0) { // [cite: 1]
-        container.innerHTML = '<p style="text-align: center; color: #718096; padding: 40px;">No transactions yet. Add your first transaction above!</p>'; // [cite: 1]
-        return; // [cite: 1]
+function updateTransactionsList() {
+    if (!currentUser) return;
+    const container = document.getElementById('transactionsList');
+    if (transactions.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #718096; padding: 40px;">No transactions yet. Add your first transaction above!</p>';
+        return;
     }
-
     container.innerHTML = transactions.map(transaction => `
         <div class="transaction-item">
             <div class="transaction-info">
@@ -478,99 +365,90 @@ function updateTransactionsList() { // [cite: 1]
             </div>
             <button class="delete-btn" onclick="deleteTransaction(${transaction.id})">🗑️</button>
         </div>
-    `).join(''); // [cite: 1]
+    `).join('');
 }
 
 // Delete transaction function
-function deleteTransaction(id) { // [cite: 1]
-    if (!currentUser) return; // Only allow if logged in
-
-    if (confirm('Are you sure you want to delete this transaction?')) { // [cite: 1]
-        transactions = transactions.filter(t => t.id !== id); // [cite: 1]
-        updateDashboard(); // [cite: 1]
-        updateTransactionsList(); // [cite: 1]
-        updateAnalytics(); // [cite: 1]
+function deleteTransaction(id) {
+    if (!currentUser) return;
+    if (confirm('Are you sure you want to delete this transaction?')) {
+        transactions = transactions.filter(t => t.id !== id);
+        updateDashboard();
+        updateTransactionsList();
+        updateAnalytics();
     }
 }
 
 // Initialize Analytics
-function initializeAnalytics() { // [cite: 1]
+function initializeAnalytics() {
     if (!currentUser) {
-        // Clear existing charts if any, and return
         for (const chartKey in charts) {
             if (charts[chartKey]) {
                 charts[chartKey].destroy();
-                charts[chartKey] = null; // Clear reference
+                charts[chartKey] = null;
             }
         }
-        updateSummaryCards(); // Clear summary cards
+        updateSummaryCards();
         return;
     }
-
-    // Destroy existing charts if they exist before creating new ones
     for (const chartKey in charts) {
         if (charts[chartKey]) {
             charts[chartKey].destroy();
         }
     }
-
-    createTrendsChart(); // [cite: 1]
-    createCategoryChart(); // [cite: 1]
-    createPieChart(); // [cite: 1]
-    createMonthlyChart(); // [cite: 1]
-    updateAnalytics(); // [cite: 1]
+    createTrendsChart();
+    createCategoryChart();
+    createPieChart();
+    createMonthlyChart();
+    updateAnalytics();
 }
 
-// Set analytics period
-function setAnalyticsPeriod(period, event) { // [cite: 1]
-    if (!currentUser) return; // Only allow if logged in
-
-    analyticsPeriod = period; // [cite: 1]
-    document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active')); // [cite: 1]
-    if (event && event.target) { // Ensure event and target exist
-        event.target.classList.add('active'); // [cite: 1]
+// Set analytics period (month/year) for trends chart
+function setAnalyticsPeriod(period, event) {
+    if (!currentUser) return;
+    analyticsPeriod = period;
+    document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+    if (event && event.target) {
+        event.target.classList.add('active');
     } else {
-        // If called programmatically, find and activate the button
         const targetBtn = document.querySelector(`.time-btn[onclick*="${period}"]`);
         if (targetBtn) targetBtn.classList.add('active');
     }
-    updateAnalytics(); // [cite: 1]
+    updateAnalytics();
 }
 
 // Create Trends Chart
-function createTrendsChart() { // [cite: 1]
-    const ctx = document.getElementById('trendsChart').getContext('2d'); // [cite: 1]
-    charts.trends = new Chart(ctx, { // [cite: 1]
-        type: 'line', // [cite: 1]
-        data: { // [cite: 1]
-            labels: [], // [cite: 1]
-            datasets: [{ // [cite: 1]
-                label: 'Income', // [cite: 1]
-                data: [], // [cite: 1]
-                borderColor: '#13c45c', // [cite: 1]
-                backgroundColor: 'rgba(19, 196, 92, 0.1)', // [cite: 1]
-                tension: 0.4 // [cite: 1]
+function createTrendsChart() {
+    const ctx = document.getElementById('trendsChart').getContext('2d');
+    charts.trends = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Income',
+                data: [],
+                borderColor: '#13c45c',
+                backgroundColor: 'rgba(19, 196, 92, 0.1)',
+                tension: 0.4
             }, {
-                label: 'Expenses', // [cite: 1]
-                data: [], // [cite: 1]
-                borderColor: '#bd0d0d', // [cite: 1]
-                backgroundColor: 'rgba(189, 13, 13, 0.1)', // [cite: 1]
-                tension: 0.4 // [cite: 1]
+                label: 'Expenses',
+                data: [],
+                borderColor: '#bd0d0d',
+                backgroundColor: 'rgba(189, 13, 13, 0.1)',
+                tension: 0.4
             }]
         },
-        options: { // [cite: 1]
-            responsive: true, // [cite: 1]
-            plugins: { // [cite: 1]
-                legend: { // [cite: 1]
-                    position: 'top', // [cite: 1]
-                }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
             },
-            scales: { // [cite: 1]
-                y: { // [cite: 1]
-                    beginAtZero: true, // [cite: 1]
-                    ticks: { // [cite: 1]
-                        callback: function(value) { // [cite: 1]
-                            return '$' + value; // [cite: 1]
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value;
                         }
                     }
                 }
@@ -580,34 +458,32 @@ function createTrendsChart() { // [cite: 1]
 }
 
 // Create Category Chart
-function createCategoryChart() { // [cite: 1]
-    const ctx = document.getElementById('categoryChart').getContext('2d'); // [cite: 1]
-    charts.category = new Chart(ctx, { // [cite: 1]
-        type: 'bar', // [cite: 1]
-        data: { // [cite: 1]
-            labels: [], // [cite: 1]
-            datasets: [{ // [cite: 1]
-                label: 'Amount ($)', // [cite: 1]
-                data: [], // [cite: 1]
-                backgroundColor: [ // [cite: 1]
-                    '#667eea', '#764ba2', '#13c45c', '#bd0d0d', // [cite: 1]
-                    '#f093fb', '#f5576c', '#4facfe', '#00f2fe' // [cite: 1]
+function createCategoryChart() {
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+    charts.category = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Amount ($)',
+                data: [],
+                backgroundColor: [
+                    '#667eea', '#764ba2', '#13c45c', '#bd0d0d',
+                    '#f093fb', '#f5576c', '#4facfe', '#00f2fe'
                 ]
             }]
         },
-        options: { // [cite: 1]
-            responsive: true, // [cite: 1]
-            plugins: { // [cite: 1]
-                legend: { // [cite: 1]
-                    display: false // [cite: 1]
-                }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
             },
-            scales: { // [cite: 1]
-                y: { // [cite: 1]
-                    beginAtZero: true, // [cite: 1]
-                    ticks: { // [cite: 1]
-                        callback: function(value) { // [cite: 1]
-                            return '$' + value; // [cite: 1]
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value;
                         }
                     }
                 }
@@ -617,61 +493,55 @@ function createCategoryChart() { // [cite: 1]
 }
 
 // Create Pie Chart
-function createPieChart() { // [cite: 1]
-    const ctx = document.getElementById('pieChart').getContext('2d'); // [cite: 1]
-    charts.pie = new Chart(ctx, { // [cite: 1]
-        type: 'doughnut', // [cite: 1]
-        data: { // [cite: 1]
-            labels: ['Income', 'Expenses'], // [cite: 1]
-            datasets: [{ // [cite: 1]
-                data: [0, 0], // [cite: 1]
-                backgroundColor: ['#13c45c', '#bd0d0d'], // [cite: 1]
-                borderWidth: 0 // [cite: 1]
+function createPieChart() {
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    charts.pie = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Income', 'Expenses'],
+            datasets: [{
+                data: [0, 0],
+                backgroundColor: ['#13c45c', '#bd0d0d'],
+                borderWidth: 0
             }]
         },
-        options: { // [cite: 1]
-            responsive: true, // [cite: 1]
-            plugins: { // [cite: 1]
-                legend: { // [cite: 1]
-                    position: 'bottom' // [cite: 1]
-                }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
             }
         }
     });
 }
 
 // Create Monthly Chart
-function createMonthlyChart() { // [cite: 1]
-    const ctx = document.getElementById('monthlyChart').getContext('2d'); // [cite: 1]
-    charts.monthly = new Chart(ctx, { // [cite: 1]
-        type: 'bar', // [cite: 1]
-        data: { // [cite: 1]
-            labels: [], // [cite: 1]
-            datasets: [{ // [cite: 1]
-                label: 'Net Profit', // [cite: 1]
-                data: [], // [cite: 1]
-                backgroundColor: function(context) { // [cite: 1]
-                    // Safely check for parsed and y
-                    if (context.parsed && typeof context.parsed.y !== 'undefined') { // [cite: 1]
-                        return context.parsed.y >= 0 ? '#13c45c' : '#bd0d0d'; // [cite: 1]
+function createMonthlyChart() {
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    charts.monthly = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Net Profit',
+                data: [],
+                backgroundColor: function(context) {
+                    if (context.parsed && typeof context.parsed.y !== 'undefined') {
+                        return context.parsed.y >= 0 ? '#13c45c' : '#bd0d0d';
                     }
-                    // fallback color
-                    return '#805ad5'; // [cite: 1]
+                    return '#805ad5';
                 }
             }]
         },
-        options: { // [cite: 1]
-            responsive: true, // [cite: 1]
-            plugins: { // [cite: 1]
-                legend: { // [cite: 1]
-                    display: false // [cite: 1]
-                }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
             },
-            scales: { // [cite: 1]
-                y: { // [cite: 1]
-                    ticks: { // [cite: 1]
-                        callback: function(value) { // [cite: 1]
-                            return '$' + value; // [cite: 1]
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value;
                         }
                     }
                 }
@@ -681,174 +551,176 @@ function createMonthlyChart() { // [cite: 1]
 }
 
 // Update Analytics
-function updateAnalytics() { // [cite: 1]
-    if (!currentUser) return; // Only update if logged in
-
-    if (transactions.length === 0) { // [cite: 1]
-        // Reset all charts and summaries
-        updateSummaryCards(); // [cite: 1]
-        // Destroy existing charts if they exist
+function updateAnalytics() {
+    if (!currentUser) return;
+    if (transactions.length === 0) {
+        updateSummaryCards();
         for (const chartKey in charts) {
             if (charts[chartKey]) {
                 charts[chartKey].destroy();
-                charts[chartKey] = null; // Clear reference
+                charts[chartKey] = null;
             }
         }
-        createTrendsChart(); // Recreate empty charts
+        createTrendsChart();
         createCategoryChart();
         createPieChart();
         createMonthlyChart();
-        return; // [cite: 1]
+        return;
     }
-
-    updateTrendsChart(); // [cite: 1]
-    updateCategoryChart(); // [cite: 1]
-    updatePieChart(); // [cite: 1]
-    updateMonthlyChart(); // [cite: 1]
-    updateSummaryCards(); // [cite: 1]
+    updateTrendsChart();
+    updateCategoryChart();
+    updatePieChart();
+    updateMonthlyChart();
+    updateSummaryCards();
 }
 
 // Update Trends Chart
-function updateTrendsChart() { // [cite: 1]
-    const data = getTimeSeriesData(); // [cite: 1]
-    charts.trends.data.labels = data.labels; // [cite: 1]
-    charts.trends.data.datasets[0].data = data.income; // [cite: 1]
-    charts.trends.data.datasets[1].data = data.expenses; // [cite: 1]
-    charts.trends.update(); // [cite: 1]
+function updateTrendsChart() {
+    const data = getTrendsData();
+    charts.trends.data.labels = data.labels;
+    charts.trends.data.datasets[0].data = data.income;
+    charts.trends.data.datasets[1].data = data.expenses;
+    charts.trends.update();
 }
 
 // Update Category Chart
-function updateCategoryChart() { // [cite: 1]
-    const categoryData = getCategoryData(); // [cite: 1]
-    charts.category.data.labels = categoryData.labels; // [cite: 1]
-    charts.category.data.datasets[0].data = categoryData.data; // [cite: 1]
-    charts.category.update(); // [cite: 1]
+function updateCategoryChart() {
+    const categoryData = getCategoryData();
+    charts.category.data.labels = categoryData.labels;
+    charts.category.data.datasets[0].data = categoryData.data;
+    charts.category.update();
 }
 
 // Update Pie Chart
-function updatePieChart() { // [cite: 1]
-    const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-
-    charts.pie.data.datasets[0].data = [totalIncome, totalExpenses]; // [cite: 1]
-    charts.pie.update(); // [cite: 1]
+function updatePieChart() {
+    const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    charts.pie.data.datasets[0].data = [totalIncome, totalExpenses];
+    charts.pie.update();
 }
 
 // Update Monthly Chart
-function updateMonthlyChart() { // [cite: 1]
-    const monthlyData = getMonthlyData(); // [cite: 1]
-    charts.monthly.data.labels = monthlyData.labels; // [cite: 1]
-    charts.monthly.data.datasets[0].data = monthlyData.data; // [cite: 1]
-    charts.monthly.update(); // [cite: 1]
+function updateMonthlyChart() {
+    const monthlyData = getMonthlyData();
+    charts.monthly.data.labels = monthlyData.labels;
+    charts.monthly.data.datasets[0].data = monthlyData.data;
+    charts.monthly.update();
 }
-// Get time series data
-function getTimeSeriesData() { // [cite: 1]
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // [cite: 1]
-    const currentDate = new Date(); // [cite: 1]
-    const labels = []; // [cite: 1]
-    const incomeData = []; // [cite: 1]
-    const expenseData = []; // [cite: 1]
 
-    for (let i = 11; i >= 0; i--) { // [cite: 1]
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1); // [cite: 1]
-        const monthLabel = months[date.getMonth()] + ' ' + date.getFullYear(); // [cite: 1]
-        labels.push(monthLabel); // [cite: 1]
-
-        const monthTransactions = transactions.filter(t => { // [cite: 1]
-            const tDate = new Date(t.timestamp); // [cite: 1]
-            return tDate.getMonth() === date.getMonth() && tDate.getFullYear() === date.getFullYear(); // [cite: 1]
+// Get trends data for chart (month/year)
+function getTrendsData() {
+    if (analyticsPeriod === 'year') {
+        // Group by year
+        const years = [...new Set(transactions.map(t => t.year))].sort();
+        const income = years.map(y =>
+            transactions.filter(t => t.type === 'income' && t.year === y)
+                .reduce((sum, t) => sum + t.amount, 0)
+        );
+        const expenses = years.map(y =>
+            transactions.filter(t => t.type === 'expense' && t.year === y)
+                .reduce((sum, t) => sum + t.amount, 0)
+        );
+        return { labels: years.map(String), income, expenses };
+    } else {
+        // Group by actual months in data (YYYY-MM)
+        const monthSet = new Set(
+            transactions.map(t => {
+                const d = t.timestamp ? new Date(t.timestamp) : new Date(t.date);
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            })
+        );
+        const months = Array.from(monthSet).sort();
+        const labels = months.map(m => {
+            const [y, mo] = m.split('-');
+            return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo)-1]} ${y}`;
         });
-
-        const monthIncome = monthTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-        const monthExpenses = monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-
-        incomeData.push(monthIncome); // [cite: 1]
-        expenseData.push(monthExpenses); // [cite: 1]
+        const income = months.map(m => {
+            return transactions.filter(t => {
+                const d = t.timestamp ? new Date(t.timestamp) : new Date(t.date);
+                return t.type === 'income' && `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` === m;
+            }).reduce((sum, t) => sum + t.amount, 0);
+        });
+        const expenses = months.map(m => {
+            return transactions.filter(t => {
+                const d = t.timestamp ? new Date(t.timestamp) : new Date(t.date);
+                return t.type === 'expense' && `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` === m;
+            }).reduce((sum, t) => sum + t.amount, 0);
+        });
+        return { labels, income, expenses };
     }
-
-    return { labels, income: incomeData, expenses: expenseData }; // [cite: 1]
 }
-
 // Get category data
-function getCategoryData() { // [cite: 1]
-    const categories = {}; // [cite: 1]
-
-    transactions.forEach(t => { // [cite: 1]
-        if (!categories[t.category]) { // [cite: 1]
-            categories[t.category] = 0; // [cite: 1]
+function getCategoryData() {
+    const categories = {};
+    transactions.forEach(t => {
+        if (!categories[t.category]) {
+            categories[t.category] = 0;
         }
-        categories[t.category] += t.amount; // [cite: 1]
+        categories[t.category] += t.amount;
     });
-
-    const labels = Object.keys(categories); // [cite: 1]
-    const data = Object.values(categories); // [cite: 1]
-
-    return { labels, data }; // [cite: 1]
+    const labels = Object.keys(categories);
+    const data = Object.values(categories);
+    return { labels, data };
 }
 
-// Get monthly data
-function getMonthlyData() { // [cite: 1]
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // [cite: 1]
-    const currentDate = new Date(); // [cite: 1]
-    const labels = []; // [cite: 1]
-    const data = []; // [cite: 1]
-
-    for (let i = 11; i >= 0; i--) { // Show last 12 months instead of 6 [cite: 1]
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1); // [cite: 1]
-        const monthLabel = months[date.getMonth()] + ' ' + date.getFullYear(); // [cite: 1]
-        labels.push(monthLabel); // [cite: 1]
-
-        const monthTransactions = transactions.filter(t => { // [cite: 1]
-            const tDate = new Date(t.timestamp); // [cite: 1]
-            return tDate.getMonth() === date.getMonth() && tDate.getFullYear() === date.getFullYear(); // [cite: 1]
-        });
-
-        const monthIncome = monthTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-        const monthExpenses = monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0); // [cite: 1]
-        const netProfit = monthIncome - monthExpenses; // [cite: 1]
-
-        data.push(netProfit); // [cite: 1]
-    }
-
-    return { labels, data }; // [cite: 1]
+// Get monthly data for summary chart
+function getMonthlyData() {
+    // Group by actual months in data (YYYY-MM)
+    const monthSet = new Set(
+        transactions.map(t => {
+            const d = t.timestamp ? new Date(t.timestamp) : new Date(t.date);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        })
+    );
+    const months = Array.from(monthSet).sort();
+    const labels = months.map(m => {
+        const [y, mo] = m.split('-');
+        return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo)-1]} ${y}`;
+    });
+    const data = months.map(m => {
+        const income = transactions.filter(t => {
+            const d = t.timestamp ? new Date(t.timestamp) : new Date(t.date);
+            return t.type === 'income' && `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` === m;
+        }).reduce((sum, t) => sum + t.amount, 0);
+        const expenses = transactions.filter(t => {
+            const d = t.timestamp ? new Date(t.timestamp) : new Date(t.date);
+            return t.type === 'expense' && `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` === m;
+        }).reduce((sum, t) => sum + t.amount, 0);
+        return income - expenses;
+    });
+    return { labels, data };
 }
-
 // Update summary cards
-function updateSummaryCards() { // [cite: 1]
-    if (!currentUser || transactions.length === 0) { // [cite: 1]
-        document.getElementById('topIncomeCategory').textContent = 'N/A'; // [cite: 1]
-        document.getElementById('topExpenseCategory').textContent = 'N/A'; // [cite: 1]
-        document.getElementById('bestMonth').textContent = 'N/A'; // [cite: 1]
-        document.getElementById('avgTransaction').textContent = '$0.00'; // [cite: 1]
-        return; // [cite: 1]
+function updateSummaryCards() {
+    if (!currentUser || transactions.length === 0) {
+        document.getElementById('topIncomeCategory').textContent = 'N/A';
+        document.getElementById('topExpenseCategory').textContent = 'N/A';
+        document.getElementById('bestMonth').textContent = 'N/A';
+        document.getElementById('avgTransaction').textContent = '$0.00';
+        return;
     }
-
     // Top income category
-    const incomeCategories = {}; // [cite: 1]
-    transactions.filter(t => t.type === 'income').forEach(t => { // [cite: 1]
-        incomeCategories[t.category] = (incomeCategories[t.category] || 0) + t.amount; // [cite: 1]
+    const incomeCategories = {};
+    transactions.filter(t => t.type === 'income').forEach(t => {
+        incomeCategories[t.category] = (incomeCategories[t.category] || 0) + t.amount;
     });
-    const topIncomeCategory = Object.keys(incomeCategories).reduce((a, b) => // [cite: 1]
-        incomeCategories[a] > incomeCategories[b] ? a : b, 'N/A'); // [cite: 1]
-
+    const topIncomeCategory = Object.keys(incomeCategories).reduce((a, b) =>
+        incomeCategories[a] > incomeCategories[b] ? a : b, 'N/A');
     // Top expense category
-    const expenseCategories = {}; // [cite: 1]
-    transactions.filter(t => t.type === 'expense').forEach(t => { // [cite: 1]
-        expenseCategories[t.category] = (expenseCategories[t.category] || 0) + t.amount; // [cite: 1]
+    const expenseCategories = {};
+    transactions.filter(t => t.type === 'expense').forEach(t => {
+        expenseCategories[t.category] = (expenseCategories[t.category] || 0) + t.amount;
     });
-    const topExpenseCategory = Object.keys(expenseCategories).reduce((a, b) => // [cite: 1]
-        expenseCategories[a] > expenseCategories[b] ? a : b, 'N/A'); // [cite: 1]
-
+    const topExpenseCategory = Object.keys(expenseCategories).reduce((a, b) =>
+        expenseCategories[a] > expenseCategories[b] ? a : b, 'N/A');
     // Best month
-    const monthlyProfits = getMonthlyData(); // [cite: 1]
-    const bestMonthIndex = monthlyProfits.data.indexOf(Math.max(...monthlyProfits.data)); // [cite: 1]
-    const bestMonth = monthlyProfits.labels[bestMonthIndex] || 'N/A'; // [cite: 1]
-
+    const monthlyProfits = getMonthlyData();
+    const bestMonthIndex = monthlyProfits.data.indexOf(Math.max(...monthlyProfits.data));
+    const bestMonth = monthlyProfits.labels[bestMonthIndex] || 'N/A';
     // Average transaction
-    const avgTransaction = transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length; // [cite: 1]
-
-    document.getElementById('topIncomeCategory').textContent = topIncomeCategory.charAt(0).toUpperCase() + topIncomeCategory.slice(1); // [cite: 1]
-    document.getElementById('topExpenseCategory').textContent = topExpenseCategory.charAt(0).toUpperCase() + topExpenseCategory.slice(1); // [cite: 1]
-    document.getElementById('bestMonth').textContent = bestMonth; // [cite: 1]
-    document.getElementById('avgTransaction').textContent = '$' + avgTransaction.toFixed(2); // [cite: 1]
+    const avgTransaction = transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length;
+    document.getElementById('topIncomeCategory').textContent = topIncomeCategory.charAt(0).toUpperCase() + topIncomeCategory.slice(1);
+    document.getElementById('topExpenseCategory').textContent = topExpenseCategory.charAt(0).toUpperCase() + topExpenseCategory.slice(1);
+    document.getElementById('bestMonth').textContent = bestMonth;
+    document.getElementById('avgTransaction').textContent = '$' + avgTransaction.toFixed(2);
 }
