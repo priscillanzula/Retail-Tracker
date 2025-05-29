@@ -1,82 +1,87 @@
-## 📊 Trader Expense & Income Tracker
-### Overview
-The Trader Expense & Income Tracker is a web application designed to help traders and small business owners efficiently manage their finances by tracking income and expenses. It offers multiple input methods: voice, photo (receipt scanning), and manual entry, providing a flexible and user-friendly experience. The application also features a comprehensive analytics dashboard to visualize financial trends, category performance, and overall profitability.
+BisWatch - Financial Tracker
+A comprehensive web-based financial tracking application designed for freelancers, small business owners, and individuals to manage their income and expenses effortlessly.
 
-Features
-- Intuitive Dashboard: At a glance, see your total income, total expenses, net profit, and total transactions.
-- Multiple Input Methods:
-   Voice Input: Speak your transactions naturally (e.g., "Income 500 dollars for perfume products on 2024-04-20 in category supplies").
-  
-   Photo Input: Upload receipt photos for automatic data extraction (simulated OCR).
-  
-   Manual Input: Traditional form-based entry for detailed control.
-  
-- Dynamic Transaction List: View a chronological list of all your recorded transactions with options to delete.
-- Comprehensive Analytics Dashboard:
-   Financial Trends Chart: Visualize income and expense trends over time.
-  
-   Category Performance Chart: Understand where your money is going with bar charts by category.
-  
-   Income vs. Expenses Distribution: A pie chart to quickly grasp your income and expense proportions.
-  
-   Monthly Financial Summary: Track net profit month-by-month.
-  
-- Key Summaries: Identify your top income/expense categories, best performing month, and average transaction value.
-- Responsive Design: Optimized for seamless use across various devices.
+🌐 Live Demo
+https://bizwatch.netlify.app/
 
-### Technologies Used
+✨ Features
+Smart Input Methods
 
-- HTML5
+🎤 Voice Input - Record transactions by speaking naturally
 
-- CSS3
+📷 Photo Input - Upload receipt photos for automatic data extraction
 
-- JavaScript (ES6+)
+✍️ Manual Input - Traditional form-based transaction entry
 
-- Chart.js (for data visualization)
+Analytics & Visualization
 
-- Web Speech API (for voice recognition)
+📊 Interactive Charts - Financial trends, category performance, and distribution charts
 
-### Getting Started
-Installation
+📈 Dashboard - Real-time overview of total income, expenses, net profit, and transaction count
 
-1. Clone the repository:
+📋 Transaction History - Detailed log of all financial activities
 
-   git clone https://github.com/your-username/trader-expense-tracker.git
+🔍 Time-based Analysis - View data by year or month
 
-2. Navigate to the project directory:
+User Experience
 
-   cd trader-expense-tracker
+👤 User Authentication - Secure login and registration system
 
-### Usage
-- Open index.html: Simply open the index.html file in your web browser.
+💡 Personalized Insights - Smart tips and financial health summaries
 
-- Add Transactions: Choose your preferred input method (Voice, Photo, or Manual) to add new income or expense entries.
+📱 Responsive Design - Works seamlessly on desktop and mobile devices
 
-- Monitor Your Finances: The dashboard and analytics charts will update automatically to reflect your financial data.
+🛠️ Technologies Used
 
-### Project Structure
+Frontend: HTML5, CSS3, JavaScript (ES6+)
 
-├── index.html          # Main HTML file
+Charts: Chart.js for data visualization
 
-├── styles.css          # Styling for the application
+Styling: Custom CSS with modern design principles
 
-└── script.js           # Core JavaScript logic
+Deployment: Netlify
 
-### Contributing
-Contributions are welcome!
-<table>
-   <tbody>
-      <tr>
- <td align="center">
-        <a href="https://github.com/priscillanzula">
-          <img src="https://avatars.githubusercontent.com/u/144167777?v=4" width="100;" alt="priscillanzula"/>
-          <br />
-          <sub><b>Priscilla Nzula</b></sub>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+🚀 Getting Started
 
-### License
-This project is open source and available under the MIT License.
+Visit the live application at https://bizwatch.netlify.app/
+
+Register for a new account or login if you already have one.
+
+Start adding transactions using your preferred input method.
+
+View your financial analytics and track your business performance
+
+📋 Transaction Categories
+
+Sales
+
+Services
+
+Supplies
+
+Rent
+
+Utilities
+
+Marketing
+
+Travel
+
+Food
+
+Other
+
+🎯 Perfect For
+
+Freelancers tracking project income.
+ 
+Small business owners managing cash flow.
+
+Individuals monitoring personal finances.
+
+Anyone needing simple, effective expense tracking
+
+📄 License
+© 2025 Nzula p. All rights reserved.
+
+Track your finances with BisWatch - Your ultimate tool for financial management.
