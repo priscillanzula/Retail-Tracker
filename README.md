@@ -1,11 +1,11 @@
-BisWatch - Financial Tracker
+### BisWatch - Financial Tracker
 A comprehensive web-based financial tracking application designed for freelancers, small business owners, and individuals to manage their income and expenses effortlessly.
 
-🌐 Live Demo
+### 🌐 Live Demo
 https://bizwatch.netlify.app/
 
-✨ Features
-Smart Input Methods
+### ✨ Features
+### Smart Input Methods
 
 🎤 Voice Input - Record transactions by speaking naturally
 
@@ -13,7 +13,7 @@ Smart Input Methods
 
 ✍️ Manual Input - Traditional form-based transaction entry
 
-Analytics & Visualization
+### Analytics & Visualization
 
 📊 Interactive Charts - Financial trends, category performance, and distribution charts
 
@@ -23,7 +23,8 @@ Analytics & Visualization
 
 🔍 Time-based Analysis - View data by year or month
 
-User Experience
+
+### User Experience
 
 👤 User Authentication - Secure login and registration system
 
@@ -31,7 +32,8 @@ User Experience
 
 📱 Responsive Design - Works seamlessly on desktop and mobile devices
 
-🛠️ Technologies Used
+
+### 🛠️ Technologies Used
 
 Frontend: HTML5, CSS3, JavaScript (ES6+)
 
@@ -41,7 +43,8 @@ Styling: Custom CSS with modern design principles
 
 Deployment: Netlify
 
-🚀 Getting Started
+
+### 🚀 Getting Started
 
 Visit the live application at https://bizwatch.netlify.app/
 
@@ -49,9 +52,10 @@ Register for a new account or login if you already have one.
 
 Start adding transactions using your preferred input method.
 
-View your financial analytics and track your business performance
+View your financial analytics and track your business performance.
 
-📋 Transaction Categories
+
+### 📋 Transaction Categories
 
 Sales
 
@@ -71,7 +75,8 @@ Food
 
 Other
 
-🎯 Perfect For
+
+### 🎯 Perfect For
 
 Freelancers tracking project income.
  
@@ -81,7 +86,8 @@ Individuals monitoring personal finances.
 
 Anyone needing simple, effective expense tracking
 
-📄 License
+
+### 📄 License
 © 2025 Nzula p. All rights reserved.
 
 Track your finances with BisWatch - Your ultimate tool for financial management.
