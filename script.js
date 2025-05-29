@@ -89,13 +89,12 @@ function loginUser() {
         // Hide testimonials and how-it-works
         document.getElementById('testimonialsSection').classList.add('hidden');
         document.getElementById('howItWorksSection').classList.add('hidden');
-        // Set the centered welcome message
-        document.getElementById('welcomeMessage').innerHTML =
-        `Welcome ${currentUser.businessName} to BizWatch.<br>Track your cash flow!`;
+        
         loadSampleData();
         updateDashboard();
         updateTransactionsList();
         initializeAnalytics();
+        updatePersonalSummaryCard();
     } else {
         alert('Invalid email or password. Please try again or register.');
     }
@@ -115,6 +114,7 @@ function logoutUser() {
     updateDashboard();
     updateTransactionsList();
     initializeAnalytics();
+    updatePersonalSummaryCard();
 }
 
 // Sample Data Load (for demo purposes)
@@ -321,6 +321,7 @@ function addTransaction() {
     updateDashboard();
     updateTransactionsList();
     updateAnalytics();
+    
     document.getElementById('amount').value = '';
     document.getElementById('description').value = '';
     document.getElementById('transactionDate').value = '';
@@ -330,6 +331,7 @@ function addTransaction() {
     addBtn.textContent = '➕ Add Transaction';
     addBtn.style.animation = '';
     alert(`✅ ${type === 'income' ? 'Income' : 'Expense'} of $${amount.toFixed(2)} added successfully!`);
+    
 }
 
 // Update dashboard calculations
@@ -349,7 +351,31 @@ function updateDashboard() {
         profitElement.className = 'amount expense';
     }
 }
-
+function updatePersonalSummaryCard() {
+    const card = document.getElementById('personalSummaryCard');
+    if (!currentUser) {
+        card.style.display = 'none';
+        return;
+    }
+    // Get current month and year
+    const now = new Date();
+    const thisMonth = now.getMonth() + 1;
+    const thisYear = now.getFullYear();
+    // Filter transactions for this month
+    const monthTx = transactions.filter(t => {
+        const txDate = new Date(t.date);
+        return txDate.getFullYear() === thisYear && (txDate.getMonth() + 1) === thisMonth;
+    });
+    const income = monthTx.filter(t => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0);
+    const expenses = monthTx.filter(t => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0);
+    const netProfit = income - expenses;
+    document.getElementById('summaryUserName').textContent = currentUser.businessName;
+    // document.getElementById('summaryBalance').textContent = `Ksh ${netProfit.toLocaleString()}`;
+    document.getElementById('summaryTip').textContent = netProfit >= 0
+        ? "Great job! You're on track this month. 🎯"
+        : "Watch your expenses to improve your balance!";
+    card.style.display = 'block';
+}
 // Update transactions list display
 function updateTransactionsList() {
     if (!currentUser) return;
@@ -384,6 +410,7 @@ function deleteTransaction(id) {
         updateDashboard();
         updateTransactionsList();
         updateAnalytics();
+        updatePersonalSummaryCard();
     }
 }
 
