@@ -54,6 +54,16 @@ function showMainContentAfterLogin() {
     document.querySelector('.testimonials').style.display = 'none';
     document.querySelector('.how-it-works').style.display = 'none';
 }
+function updateAuthButtons() {
+    const authButtonsDiv = document.querySelector('.auth-buttons');
+    if (currentUser) {
+        authButtonsDiv.innerHTML = `<span style="color: black; margin-right: 10px;">Welcome, ${currentUser.businessName}!</span>
+            <button class="btn btn-secondary btn-small" onclick="logoutUser()">Logout</button>`;
+    } else {
+        authButtonsDiv.innerHTML = `<button class="btn btn-small" onclick="openModal('loginModal')">Login</button>
+            <button class="btn btn-small" onclick="openModal('registerModal')">Register</button>`;
+    }
+}
 function registerUser() {
     const businessName = document.getElementById('businessName').value;
     const email = document.getElementById('registerEmail').value;
@@ -89,7 +99,7 @@ function loginUser() {
         // Hide testimonials and how-it-works
         document.getElementById('testimonialsSection').classList.add('hidden');
         document.getElementById('howItWorksSection').classList.add('hidden');
-        
+        updateAuthButtons();
         loadSampleData();
         updateDashboard();
         updateTransactionsList();
@@ -106,11 +116,8 @@ function logoutUser() {
     alert('You have been logged out.');
     document.getElementById('mainContent').classList.add('hidden');
     document.getElementById('homepage').classList.remove('hidden');
-    const authButtonsDiv = document.querySelector('.auth-buttons');
-    authButtonsDiv.innerHTML = `<button class="btn" onclick="openModal('loginModal')">Login</button>
-                                <button class="btn" onclick="openModal('registerModal')">Register</button>`;
-                                authButtonsDiv.innerHTML = `<button class="btn btn-small" onclick="openModal('loginModal')">Login</button>
-                                <button class="btn btn-small" onclick="openModal('registerModal')">Register</button>`;
+    
+    updateAuthButtons();
     updateDashboard();
     updateTransactionsList();
     initializeAnalytics();
@@ -372,7 +379,7 @@ function updatePersonalSummaryCard() {
     document.getElementById('summaryUserName').textContent = currentUser.businessName;
     // document.getElementById('summaryBalance').textContent = `Ksh ${netProfit.toLocaleString()}`;
     document.getElementById('summaryTip').textContent = netProfit >= 0
-        ? "Great job! You're on track this month. 🎯"
+        ? "Great job! You're on track!. 🎯"
         : "Watch your expenses to improve your balance!";
     card.style.display = 'block';
 }
